@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Traffic Density Predictor</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1><i class="fas fa-traffic-light"></i> Traffic Predictor</h1>
+            </div>
+            <div class="sidebar-content">
+                <div class="search-panel">
+                    <h2><i class="fas fa-search-location"></i> Location Search</h2>
+                    <div class="search-inputs">
+                        <div class="input-group">
+                            <label for="city-input">City:</label>
+                            <input type="text" id="city-input" value="Hyderabad" readonly>
+                        </div>
+                        <div class="input-group">
+                            <label for="area-select">Area:</label>
+                            <select id="area-select">
+                                <option value="">Select Area</option>
+                                <option value="Ameerpet">Ameerpet</option>
+                                <option value="Kukatpally">Kukatpally</option>
+                                <option value="Madhapur">Madhapur</option>
+                                <option value="Bowenpally">Bowenpally</option>
+                                <option value="Miyapur">Miyapur</option>
+                                <option value="Secunderabad">Secunderabad</option>
+                            </select>
+                        </div>
+                        <button id="search-btn">
+                            <i class="fas fa-search"></i>
+                            <span>Search Location</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="prediction-panel">
+                    <h2><i class="fas fa-sliders-h"></i> Prediction Controls</h2>
+                    <div class="feature-inputs">
+                        <div class="input-field">
+                            <i class="far fa-clock"></i>
+                            <input type="time" id="time" name="time">
+                        </div>
+                        <div class="input-field">
+                            <i class="far fa-calendar-alt"></i>
+                            <select id="day" name="day">
+                                <option value="1">Monday</option>
+                                <option value="2">Tuesday</option>
+                                <option value="3">Wednesday</option>
+                                <option value="4">Thursday</option>
+                                <option value="5">Friday</option>
+                                <option value="6">Saturday</option>
+                                <option value="7">Sunday</option>
+                            </select>
+                        </div>
+                        <div class="input-field">
+                            <i class="fas fa-cloud-sun"></i>
+                            <select id="weather" name="weather">
+                                <option value="clear">Clear</option>
+                                <option value="rain">Rain</option>
+                                <option value="cloudy">Cloudy</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="predict-btn" disabled>
+                        <i class="fas fa-chart-line"></i>
+                        <span>Predict Traffic</span>
+                    </button>
+                </div>
+
+                <div class="results-panel">
+                    <h2><i class="fas fa-chart-bar"></i> Prediction Results</h2>
+                    <div class="result-card prediction">
+                        <div class="card-header">
+                            <i class="fas fa-traffic-light"></i>
+                            <span>Traffic Density</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="density-meter">
+                                <div class="meter-fill"></div>
+                            </div>
+                            <div class="density-value" id="predicted-density">-</div>
+                        </div>
+                    </div>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="card-header">
+                                <i class="fas fa-chart-line"></i>
+                                <span>MAE</span>
+                            </div>
+                            <div class="card-content">
+                                <span id="mae-value">-</span>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="card-header">
+                                <i class="fas fa-square-root-alt"></i>
+                                <span>RMSE</span>
+                            </div>
+                            <div class="card-content">
+                                <span id="rmse-value">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="map-container">
+                <div id="map"></div>
+                <div class="legend">
+                    <h3><i class="fas fa-info-circle"></i> Traffic Levels</h3>
+                    <div class="legend-item">
+                        <span class="color-box low"></span>
+                        <span>Low Traffic (0-0.33)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="color-box medium"></span>
+                        <span>Medium Traffic (0.34-0.66)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="color-box high"></span>
+                        <span>High Traffic (0.67-1.0)</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay">
+        <div class="loader"></div>
+        <span>Processing...</span>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container"></div>
+
+    <!-- Load Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html>
